@@ -13,7 +13,16 @@
 
 namespace sandista {
 
-	Material::Material(std::string fragDefines, std::string fragCode, ErrorManager* em) : shader(_shader) {
+	Material::Material(std::string fragDefines, std::string fragCode) : shader(_shader) {
+		baked = false;
+		this->fragCode = fragCode;
+		this->fragDefines = fragDefines;
+		
+	}
+
+	void Material::bake(ErrorManager* em) {
+		if (baked) return;
+
 		if (em == nullptr)em = ErrorManager::getSingleton();
 
 		const char* vs = "#version 330 core\n\

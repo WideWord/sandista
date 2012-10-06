@@ -17,6 +17,11 @@ namespace sandista {
 	class Material {
 	
 	private:
+
+		bool baked;
+		std::string fragDefines; 
+		std::string fragCode;
+
 		struct Param {
 			std::string name;
 			enum {
@@ -37,8 +42,9 @@ namespace sandista {
 	public:
 		const unsigned& shader;
 
-		Material(std::string fragDefines, std::string fragCode, ErrorManager* errorManager = nullptr);
+		Material(std::string fragDefines, std::string fragCode);
 		~Material();
+		void bake(ErrorManager* errorManager = nullptr); // call only in OpenGL thread
 
 		void addParam(std::string name, std::shared_ptr<Texture2d> param);
 		void addParam(std::string name, vec3 param);
