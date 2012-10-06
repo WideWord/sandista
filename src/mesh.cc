@@ -25,6 +25,7 @@ namespace sandista {
 		attr.val = new float[vsize * verts];
 		memcpy(attr.val, val, sizeof(float) * vsize * verts);
 		attr.vsize = vsize;
+		attribs.push_back(attr);
 	}
 
 	void SubMesh::setIndexAttrib(unsigned* index) {
@@ -42,10 +43,12 @@ namespace sandista {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexvbo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, inds * sizeof(unsigned) * 3, index, GL_STATIC_DRAW);
 
-		for (auto attr : attribs) {
-			glGenBuffers(1, &(attr.vbo));
-			glBindBuffer(GL_ARRAY_BUFFER, attr.vbo);
-			glBufferData(GL_ARRAY_BUFFER, verts * sizeof(float) * attr.vsize, attr.val, GL_STATIC_DRAW);
+		for (auto attr = attribs.begin(); attr != attribs.end(); ++attr) {
+			GLuint vbo;
+			glGenBuffers(1, &vbo);
+			attr->vbo = vbo;
+			glBindBuffer(GL_ARRAY_BUFFER, attr->vbo);
+			glBufferData(GL_ARRAY_BUFFER, verts * sizeof(float) * attr->vsize, attr->val, GL_STATIC_DRAW);
 		}
 
 		baked = true;
@@ -59,11 +62,11 @@ namespace sandista {
 
 		glBindVertexArray(vao);
 
-		for (auto attr : attribs) {
-			glBindBuffer(GL_ARRAY_BUFFER, attr.vbo);
-			GLint loc = glGetAttribLocation(material->shader, attr.name.c_str());
+		for (auto attr = attribs.begin(); attr != attribs.end(); ++attr) {
+			glBindBuffer(GL_ARRAY_BUFFER, attr->vbo);
+			GLint loc = glGetAttribLocation(material->shader, attr->name.c_str());
 			if (loc != -1) {
-				glVertexAttribPointer(loc, attr.vsize, GL_FLOAT, GL_FALSE, attr.vsize * sizeof(float), 0);
+				glVertexAttribPointer(loc, attr->vsize, GL_FLOAT, GL_FALSE, attr->vsize * sizeof(float), 0);
 				glEnableVertexAttribArray(loc);
 			}
 		}

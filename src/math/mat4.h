@@ -2,6 +2,7 @@
 #define MAT4_H
 
 #include "memory.h"
+#include <cmath>
 
 namespace sandista {
 
@@ -10,6 +11,20 @@ private:
     float* mtx;
 public:
 
+	static inline mat4 perspective(float fovy, float aspect, float znear, float zfar)
+	{
+		// fovy передается в градусах - сконвертируем его в радианы
+		float f = 1 / tanf(fovy * 3.14 / 360),
+				 A = (zfar + znear) / (znear - zfar),
+				 B = (2 * zfar * znear) / (znear - zfar);
+		mat4 M;
+		M[ 0] = f / aspect; M[ 1] =  0; M[ 2] =  0; M[ 3] =  0;
+		M[ 4] = 0;          M[ 5] =  f; M[ 6] =  0; M[ 7] =  0;
+		M[ 8] = 0;          M[ 9] =  0; M[10] =  A; M[11] =  B;
+		M[12] = 0;          M[13] =  0; M[14] = -1; M[15] =  0;
+		return std::move(M);
+	}
+
     inline mat4()
     {
         mtx = new float[16];
@@ -17,7 +32,7 @@ public:
 
     inline ~mat4()
     {
-        delete[] mtx;
+        delete mtx;
     }
 
     inline mat4(const mat4& other) {
@@ -25,9 +40,16 @@ public:
         memcpy(mtx, other.mtx, sizeof(float) * 16);
     }
 
+	
+
+	inline float* ptr() {
+		return mtx;
+	}
+
     inline mat4(mat4&& other)
     {
-        mtx = other.mtx;
+        mtx = new float[16];
+        memcpy(mtx, other.mtx, sizeof(float) * 16);
     }
 
     inline float& operator[] (int id)

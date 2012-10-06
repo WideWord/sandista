@@ -1,4 +1,7 @@
 #include "renderer.h"
+#include "../mesh.h"
+
+#include "../math/mat4.h"
 
 
 #include <GL/glew.h>
@@ -42,7 +45,17 @@ namespace sandista {
 	
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
 
+		glDrawBuffer(GL_BACK);
 
+		glViewport(0,0,w,h);
+		glShadeModel( GL_SMOOTH );
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearDepth( 1.0f );
+		glEnable( GL_DEPTH_TEST );
+		glDepthFunc( GL_LEQUAL );
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK); 
+		glClearColor(1,0,0,1);
 	}
 
 	
@@ -53,6 +66,15 @@ namespace sandista {
 
 	void Renderer::updateWindow () {
 		glfwSwapBuffers();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Renderer::drawSubMesh(SubMesh* subMesh) {
+		subMesh->bind();
+		GLuint shader = subMesh->material->shader;
+		
+
+		glDrawElements(GL_TRIANGLES, subMesh->inds * 3, GL_UNSIGNED_INT, NULL);
 	}
 
 

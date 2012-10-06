@@ -37,6 +37,7 @@ namespace sandista {
 			switch (param.type) {
 			case Param::Texture2d_p:
 				glActiveTexture(texture);
+				(*param.data.Texture2d_d)->bake();
 				glBindTexture(GL_TEXTURE_2D, (*param.data.Texture2d_d)->id);
 				glUniform1i(location, texture);
 			break;
@@ -69,7 +70,7 @@ namespace sandista {
 				_o_position = vec3(vertex);\n\
 				_o_normal = mat3(std_m) * std_normal;\n\
 				_o_uv = std_texture_coord;\n\
-				gl_Position = std_vp * vertex;\n\
+				gl_Position = vec4(std_position.xy,0.5, 1);//std_vp * vertex;\n\
 			}";
 
 		std::string fs("#version 330 core\n\
@@ -166,6 +167,7 @@ namespace sandista {
 			em->pushError("s.material.create.shader.validation", buffer); 
 			return;
 		}
+		baked = true;
 		
 	}
 

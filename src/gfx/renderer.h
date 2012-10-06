@@ -9,7 +9,7 @@
 namespace sandista {
 
 
-
+	class SubMesh;
 
 	class Renderer {
 	private:
@@ -19,6 +19,7 @@ namespace sandista {
 		~Renderer();
 
 		void updateWindow();
+		void drawSubMesh(SubMesh* subMesh);
 
 		const int& maxTextureSize;
 	};
