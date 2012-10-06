@@ -45,6 +45,7 @@ namespace sandista {
 		Material(std::string fragDefines, std::string fragCode);
 		~Material();
 		void bake(ErrorManager* errorManager = nullptr); // call only in OpenGL thread
+		void bind(); // call only in OGL thread
 
 		void addParam(std::string name, std::shared_ptr<Texture2d> param);
 		void addParam(std::string name, vec3 param);

@@ -1,5 +1,7 @@
 #include "material.h"
 #include "error.h"
+#include "texture2d.h"
+#include "math/vec3.h"
 
 #include <GL/glew.h>
 #ifdef SANDISTA_WINDOWS
@@ -18,6 +20,32 @@ namespace sandista {
 		this->fragCode = fragCode;
 		this->fragDefines = fragDefines;
 		
+	}
+
+	void Material::bind () {
+		if (!baked) bake();
+
+		glUseProgram(shader);
+
+		int texture = GL_TEXTURE0;
+
+
+		for (auto param : params) {
+			GLint location = glGetUniformLocation(shader, param.name.c_str());
+			if (location == -1)continue;
+			
+			switch (param.type) {
+			case Param::Texture2d_p:
+				glActiveTexture(texture);
+				glBindTexture(GL_TEXTURE_2D, (*param.data.Texture2d_d)->id);
+				glUniform1i(location, texture);
+			break;
+			case Param::vec3_p:
+				glUniform3f(location, param.data.vec3_d->x, param.data.vec3_d->y, param.data.vec3_d->z);
+				
+			}
+
+		}
 	}
 
 	void Material::bake(ErrorManager* em) {
