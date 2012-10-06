@@ -177,6 +177,8 @@ namespace sandista {
 				delete p.data.vec3_d;
 			}
 		}
+		glDeleteProgram(shader);
+
 	}
 
 	void Material::addParam(std::string name, std::shared_ptr<Texture2d> param) {

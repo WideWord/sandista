@@ -37,7 +37,8 @@ namespace sandista {
 	}
 
 	Texture2d::~Texture2d () {
-
+		if(baked) glDeleteTextures(1,&id);
+		if(data != nullptr)delete data;
 	}
 
 	void Texture2d::setData (void* data, DataFormat f) {
