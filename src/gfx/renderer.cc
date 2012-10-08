@@ -69,12 +69,14 @@ namespace sandista {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	
+
 	void Renderer::drawSubMesh(SubMesh* subMesh) {
 		subMesh->bind();
 		GLuint shader = subMesh->material->shader;
 		
 
-		glDrawElements(GL_TRIANGLES, subMesh->inds * 3, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, subMesh->inds * 3, GL_UNSIGNED_INT, 0);
 	}
 
 

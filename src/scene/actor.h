@@ -13,19 +13,13 @@ namespace sandista {
 	class Actor {
 	protected:
 		friend class Scene;
+		friend class Component;
 		Actor(Scene* parent);
 		std::list<Component*> list;
 	public:
 		Scene* const scene;
 
-		template<class T> inline T* createComponent() {
-			T* t = new T();
-			if (dynamic_cast<Component*>(t) == nullptr) {
-				delete t;
-				return;
-			}
-			list.push_back(t);
-		}
+		
 	};
 
 }

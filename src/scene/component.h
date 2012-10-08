@@ -9,7 +9,8 @@ namespace sandista {
 
 	class Component {
 	protected:
-		inline Component(Actor* parent) : actor(parent) {}
+		Component(Actor* parent);
+		virtual ~Component ();
 	public:
 		Actor* const actor;
 	};

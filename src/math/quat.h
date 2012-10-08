@@ -1,7 +1,7 @@
 #ifndef QUAT_H
 #define QUAT_H
 
-#include "math/vec3.h"
+#include "vec3.h"
 
 namespace sandista {
 

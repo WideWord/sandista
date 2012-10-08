@@ -7,6 +7,8 @@
 namespace sandista {
 
 	class Actor;
+	class Renderer;
+
 
 	class Scene {
 	private:
@@ -14,10 +16,14 @@ namespace sandista {
 	public:
 		Scene();
 		~Scene();
+
+		void render(Renderer* renderer);
 		
 		Actor* createActor();
+
 		
 	};
+
 
 }
 
